@@ -189,7 +189,7 @@ function quizFinished()
   current_question=0;
   updateText();
   response_text.text="You finished the quiz!";
-  $.post("http://kusuk.in/api/v1/achievement/unlock",{"achievement_id":1,user_email: game.authentication_params['user_email'], user_token: game.authentication_params['user_token']},
+  $.post("http://kusuk.in/api/v1/achievements/unlock",{"achievement_id":1,user_email: game.authentication_params['user_email'], user_token: game.authentication_params['user_token']},
     function(data)
     {
       console.log(data);
