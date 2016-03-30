@@ -71,7 +71,7 @@
         function(data)
         {
           console.log(data)
-window.location.replace("game.html?user_email="+data["user"]["email"]+"&user_token="+data["authentication_token"]);
+          window.location.replace("game.html?user_email="+data["user"]["email"]+"&user_token="+data["authentication_token"]+"&user_id="+data["user"]["id"]);
         })
 /* 
       /* Send the data using post */
