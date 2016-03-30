@@ -8,9 +8,8 @@
     </head>
     <body>
 
-    <h2>Completed achievements</h2>
-      <div id="achievements_div">
-      </div>
+      <h2>Completed achievements</h2>
+      <div id="achievements_div"></div>
 
     <script>
       function updateAchievements()
@@ -30,8 +29,10 @@
                 bold.appendChild(document.createTextNode(data["achievements"][i].name));
                 var para_description = document.createElement("p");
                 para_description.appendChild(document.createTextNode(data["achievements"][i].description));
-                var img_icon = document.createElement("p");
-                img_icon.appendChild(document.createTextNode(data["achievements"][i].icon));
+                var img_icon = document.createElement("img");
+                var img_src_icon = document.createAttribute("src");
+                img_src_icon.value = "http://kusuk.in/"+data["achievements"][i].icon;
+                img_icon.setAttributeNode(img_src_icon);
 
                 var element = document.getElementById("achievements_div");
                 element.appendChild(para_name);
@@ -41,7 +42,7 @@
           }
         )
       }
-      //updateAchievements();
+      updateAchievements();
 </script>
 
     <script type="text/javascript">
