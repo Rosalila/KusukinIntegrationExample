@@ -8,6 +8,42 @@
     </head>
     <body>
 
+    <h2>Completed achievements</h2>
+      <div id="achievements_div">
+      </div>
+
+    <script>
+      function updateAchievements()
+      {
+        authentication_params = {};
+        location.search.substr(1).split("&").forEach(function(item) {authentication_params[item.split("=")[0]] = item.split("=")[1]})
+        $.get("http://kusuk.in/api/v1/achievements/",
+          {id:1,achievement_id:2,name:"chimi", description:"changas", category_id:1, user_email:authentication_params["user_email"], user_token:authentication_params["user_token"] },
+          function(data)
+            {
+              console.log(data);
+              for(i=0;i<data["achievements"].length;i++)
+              {
+                var para_name = document.createElement("p");
+                var bold = document.createElement("b");
+                para_name.appendChild(bold);
+                bold.appendChild(document.createTextNode(data["achievements"][i].name));
+                var para_description = document.createElement("p");
+                para_description.appendChild(document.createTextNode(data["achievements"][i].description));
+                var img_icon = document.createElement("p");
+                img_icon.appendChild(document.createTextNode(data["achievements"][i].icon));
+
+                var element = document.getElementById("achievements_div");
+                element.appendChild(para_name);
+                element.appendChild(para_description);
+                element.appendChild(img_icon);
+            }
+          }
+        )
+      }
+      //updateAchievements();
+</script>
+
     <script type="text/javascript">
 
     window.onload = function() {
@@ -195,6 +231,7 @@ function quizFinished()
       console.log(data);
       console.log("Achievement unlocked!");
     })
+  updateAchievements();
 
 }
 
