@@ -9,21 +9,46 @@
               console.log(data);
               for(i=0;i<data["achievements"].length;i++)
               {
-                var para_name = document.createElement("p");
-                var bold = document.createElement("b");
-                para_name.appendChild(bold);
-                bold.appendChild(document.createTextNode(data["achievements"][i].name));
-                var para_description = document.createElement("p");
-                para_description.appendChild(document.createTextNode(data["achievements"][i].description));
                 var img_icon = document.createElement("img");
                 var img_src_icon = document.createAttribute("src");
                 img_src_icon.value = "http://kusuk.in/"+data["achievements"][i].icon;
                 img_icon.setAttributeNode(img_src_icon);
+                var img_width_icon = document.createAttribute("width");
 
-                var element = document.getElementById("achievements_div");
-                element.appendChild(para_name);
-                element.appendChild(para_description);
-                element.appendChild(img_icon);
+                img_width_icon.value = "200";
+
+                img_icon.setAttributeNode(img_width_icon);
+                var img_height_icon = document.createAttribute("height");
+
+                img_height_icon.value = "200";
+
+                img_icon.setAttributeNode(img_height_icon);
+                var img_class_icon = document.createAttribute("class");
+
+                img_class_icon.value = "img-responsive";
+
+                img_icon.setAttributeNode(img_class_icon);
+
+                var para_name = document.createElement("h4");
+                para_name.appendChild(document.createTextNode(data["achievements"][i].name));
+
+                var para_description = document.createElement("span");
+                var para_description_class = document.createAttribute("class");
+                para_description_class.value = "text-muted";
+                para_description.setAttributeNode(para_description_class);
+                para_description.appendChild(document.createTextNode(data["achievements"][i].description));
+
+                var achievement_div = document.createElement("div");
+                var achievement_div_class = document.createAttribute("class");
+                achievement_div_class.value = "col-xs-6 col-sm-3 placeholder";
+                achievement_div.setAttributeNode(achievement_div_class);
+
+                achievement_div.appendChild(img_icon);
+                achievement_div.appendChild(para_name);
+                achievement_div.appendChild(para_description);
+
+                var achievements_div = document.getElementById("achievements_div");
+                achievements_div.appendChild(achievement_div);
             }
           }
         )
@@ -39,7 +64,7 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser-game', { preload: prel
 
 function preload() {
 
-    game.load.atlas('button', 'assets/game/button_texture_atlas.png', 'assets/game/button_texture_atlas.json');
+    game.load.atlas('button', '../assets/game/button_texture_atlas.png', '../assets/game/button_texture_atlas.json');
     game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
 }
 
