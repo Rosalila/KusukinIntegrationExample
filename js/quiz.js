@@ -64,7 +64,7 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser-game', { preload: prel
 
 function preload() {
 
-    game.load.atlas('button', '../assets/game/button_texture_atlas.png', '../assets/game/button_texture_atlas.json');
+    game.load.atlas('button', 'assets/game/button_texture_atlas.png', 'assets/game/button_texture_atlas.json');
     game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
 }
 
