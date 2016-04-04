@@ -1,232 +1,71 @@
-<!doctype html>
-<html>
-    <head>
-        <meta charset="UTF-8" />
-        <title>hello phaser!</title>
-        <script src="phaser.min.js"></script>
-        <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-    </head>
-    <body>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
 
-    <script type="text/javascript">
+    <title>Dashboard Template for Bootstrap</title>
 
-    window.onload = function() {
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
-//var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'fdsa', { preload: preload, create: create, update: update, render: render });
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="bootstrap/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
 
+    <!-- Custom styles for this template -->
+    <link href="css/dashboard.css" rel="stylesheet">
 
-var game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser-game', { preload: preload, create: create });
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="bootstrap/assets/js/ie-emulation-modes-warning.js"></script>
 
-function preload() {
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
 
-    game.load.atlas('button', 'assets/game/button_texture_atlas.png', 'assets/game/button_texture_atlas.json');
-    game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
-}
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <script src="js/phaser.min.js"></script>
+    <script type="text/javascript" src="js/quiz.js"></script>
+  </head>
 
-var button_a;
-var button_b;
-var button_c;
+  <body>
 
-var question_text;
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="http://rosalila.github.io/KusukinIntegrationExample/">Kusukin integration example</a>
+        </div>
+      </div>
+    </nav>
 
-var answer_a_text;
-var answer_b_text;
-var answer_c_text;
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-9 col-sm-offset-0 col-md-12 col-md-offset-0 main">
+          <h1 class="page-header">Phaser quiz</h1>
+          <div class="col-xs-12 col-sm-12 placeholder" id="phaser-game"></div>
+          <h2 class="sub-header">Achievements</h2>
+          <div class="row placeholders" id="achievements_div">
+          </div>
+        </div>
+      </div>
+    </div>
 
-var response_text;
-
-var current_question;
-
-var questions=["Is the earth round?",
-                "Is the sky blue?",
-                "Is there life after death?"];
-
-var answer_choices=[["Yes","No","Maybe"],
-                    ["Maybe","No","Yes"],
-                    ["Yes","Maybe","No"]];
-
-var correct_answers=["Maybe",
-                      "Maybe",
-                      "Maybe"];
-
-WebFontConfig = {
-    //  'active' means all requested fonts have finished loading
-    //  We set a 1 second delay before calling 'createText'.
-    //  For some reason if we don't the browser cannot render the text the first time it's created.
-    active: function() { game.time.events.add(Phaser.Timer.SECOND, createQuestionText, this); },
-    //active: function() { game.time.events.add(Phaser.Timer.SECOND*2, createAnswerAText, this); },
-    //  The Google Fonts we want to load (specify as many as you like in the array)
-    google: {
-      families: ['Roboto']
-    }
-};
-
-function createQuestionText() {
-    question_text = game.add.text(game.world.centerX, 100, "");
-    question_text.anchor.setTo(0.5);
-    question_text.font = 'Roboto';
-    question_text.fontSize = 60;
-    question_text.fill = '#FFF';
-
-
-    answer_a_text = game.add.text(300, 200, "");
-    answer_a_text.font = 'Roboto';
-    answer_a_text.font.align = 'left';
-    answer_a_text.fontSize = 60;
-    answer_a_text.fill = '#FFF';
-    answer_a_text.inputEnabled = true;
-    answer_a_text.events.onInputUp.add(buttonAPressed, this);
-
-    answer_b_text = game.add.text(300, 300, "");
-    answer_b_text.font = 'Roboto';
-    answer_b_text.font.align = 'left';
-    answer_b_text.fontSize = 60;
-    answer_b_text.fill = '#FFF';
-    answer_b_text.inputEnabled = true;
-    answer_b_text.events.onInputUp.add(buttonBPressed, this);
-
-    answer_c_text = game.add.text(300, 400, "");
-    answer_c_text.font = 'Roboto';
-    answer_c_text.font.align = 'left';
-    answer_c_text.fontSize = 60;
-    answer_c_text.fill = '#FFF';
-    answer_c_text.inputEnabled = true;
-    answer_c_text.events.onInputUp.add(buttonCPressed, this);
-
-    response_text = game.add.text(game.world.centerX, 550, "Select your answer");
-    response_text.anchor.setTo(0.5);
-    response_text.font = 'Roboto';
-    response_text.fontSize = 60;
-    response_text.fill = '#FFF';
-}
-
-function create() {
-
-    game.stage.backgroundColor = '#34495e';
-
-    button_a = game.add.button(50, 200, 'button', buttonAPressed, this, 'over', 'out', 'down');
-    button_a = game.add.button(50, 300, 'button', buttonBPressed, this, 'over', 'out', 'down');
-    button_a = game.add.button(50, 400, 'button', buttonCPressed, this, 'over', 'out', 'down');
-
-    current_question=0;
-    //API call: retreive the progress by reading current_question value
-    timer = game.time.create(2000, false);
-    timer.add(1500,updateText);
-    timer.start();
-
-
-
-
-    game.authentication_params = {};
-    location.search.substr(1).split("&").forEach(function(item) {game.authentication_params[item.split("=")[0]] = item.split("=")[1]})
-
-
-    $.get("http://kusuk.in/api/v1/progress/get",{"course_id":1, user_email: game.authentication_params['user_email'], user_token: game.authentication_params['user_token']},
-      function(data)
-      {
-        current_question=Number(jQuery.parseJSON(data["progress"])["current_question"]);
-        if(current_question >= questions.length)
-        {
-          current_question=0;
-        }
-        console.log(data);
-        console.log("Retreived the current question from Kusukin: "+current_question);
-      })
-}
-
-
-function buttonAPressed () {
-  if(current_question<questions.length)
-  if(correct_answers[current_question]==answer_choices[current_question][0])
-  {
-    correctAnswer();
-    if(current_question<questions.length)
-    {
-      updateText();
-    }else {
-      quizFinished();
-    }
-  }else {
-    incorrectAnswer();
-  }
-}
-
-function buttonBPressed () {
-  if(current_question<questions.length)
-  if(correct_answers[current_question]==answer_choices[current_question][1])
-  {
-    correctAnswer();
-    if(current_question<questions.length)
-    {
-      updateText();
-    }else {
-      quizFinished();
-    }
-  }else {
-    incorrectAnswer();
-  }
-}
-
-function buttonCPressed () {
-  if(current_question<questions.length)
-  if(correct_answers[current_question]==answer_choices[current_question][2])
-  {
-    correctAnswer();
-    if(current_question<questions.length)
-    {
-      updateText();
-    }else {
-      quizFinished();
-    }
-  }else {
-    incorrectAnswer();
-  }
-}
-
-function quizFinished()
-{
-  //API call: achievement unlock
-  current_question=0;
-  updateText();
-  response_text.text="You finished the quiz!";
-  $.post("http://kusuk.in/api/v1/achievements/unlock",{"achievement_id":1,user_email: game.authentication_params['user_email'], user_token: game.authentication_params['user_token']},
-    function(data)
-    {
-      console.log(data);
-      console.log("Achievement unlocked!");
-    })
-
-}
-
-function correctAnswer()
-{
-  response_text.text="Correct!";
-  current_question= Number(current_question)+1;
-  //API call: update progress by storing current_question
-  $.post("http://kusuk.in/api/v1/progress/save",{"course_id":1,progress:{"current_question":current_question},user_email: game.authentication_params['user_email'], user_token: game.authentication_params['user_token']},
-    function(data)
-    {
-      console.log(data)
-      console.log("Stored the current question in Kusukin: "+current_question);
-    })
-}
-
-function incorrectAnswer()
-{
-  response_text.text="Incorrect, please try again.";
-}
-
-function updateText()
-{
-  question_text.text = questions[current_question];
-  answer_a_text.text = answer_choices[current_question][0];
-  answer_b_text.text = answer_choices[current_question][1];
-  answer_c_text.text = answer_choices[current_question][2];
-}
-
-    };
-
-    </script>
-
-    </body>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+    <script src="../../assets/js/vendor/holder.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
 </html>
